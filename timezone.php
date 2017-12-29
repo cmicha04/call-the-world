@@ -8,17 +8,42 @@
 			$result =$_POST['secondtimezone'];
 			$result_explode = explode('|', $result);
 			
-		
-			
+	
 
 			$userinput = $_POST['userinput'];
+
 			$firsttimezone = $_POST['firsttimezone'];
+			$firsttimezone_explode = explode('|', $firsttimezone);
+
 			$secondtimezone = $_POST['secondtimezone'];
+			$secondtimezone_explode = explode('|', $secondtimezone);
+
+			if(($firsttimezone_explode[0]>=1)&&($secondtimezone_explode[0]>0)&&($firsttimezone_explode[0]>$secondtimezone_explode[0]))
+			{//if timezone1 is greater than timezone2
+				$calculatedtimezonediff=$firsttimezone_explode[0]-$secondtimezone_explode[0];
+
+				$newtimezone=$userinput-$calculatedtimezonediff;
+
+				
+			}
+			elseif (($firsttimezone_explode[0]>0)&&($secondtimezone_explode[0]>0)&&($secondtimezone_explode[0]>$firsttimezone_explode[0])) {
+				//if timezone1 is less than timezone 2
+				$calculatedtimezonediff=$secondtimezone_explode[0]-$firsttimezone_explode[0];
+				$newtimezone= $userinput+$calculatedtimezonediff;	
+				
+			}
+			elseif (($firsttimezone_explode[0]>0)&&($secondtimezone_explode[0]<0))
+			 {
+				//if timezone1 is positive and timezone 2 is negative
+				$positivetimezone2=$secondtimezone_explode[0]*(-1);
+				$calculatedtimezonediff=$firsttimezone_explode[0]+$positivetimezone2;
+				$timediff = $userinput+$calculatedtimezonediff;
+				$newtimezone=$timediff%12;
+			}
 			
-			$calculatedtimezone =$secondtimezone-$firsttimezone;
 		
 			
-			print ($userinput. ' in '.$result_explode[1].' is '.$calculatedtimezone.'.');
+			print ($userinput. ' in '.$secondtimezone_explode[1].' is '.$newtimezone.'.');
 		}
 
 
@@ -41,6 +66,7 @@ in
 
 <select name="firsttimezone">
 	<option timeZoneId="69" gmtAdjustment="GMT+09:00" useDaylightTime="0" value="9|Tokyo">(GMT+09:00) Osaka, Sapporo, Tokyo</option>
+	<option timeZoneId="75" gmtAdjustment="GMT+10:00" useDaylightTime="1" value="10|Sydney">(GMT+10:00) Canberra, Melbourne, Sydney</option>
 	<option timeZoneId="82" gmtAdjustment="GMT+13:00" useDaylightTime="0" value="13|Hawaii">(GMT+13:00) Nuku'alofa</option>
 </select>
 
@@ -50,8 +76,9 @@ is what time in
 <!--<INPUT TYPE = "TEXT" VALUE ="secondtimezone" NAME="secondtimezone">-->
 
 <select name="secondtimezone">
-	<option timeZoneId="75" gmtAdjustment="GMT+10:00" useDaylightTime="1" value="10|Sydney">(GMT+10:00) Canberra, Melbourne, Sydney</option>
-	<option timeZoneId="76" gmtAdjustment="GMT+10:00" useDaylightTime="1" value="10|Hobart">(GMT+10:00) Hobart</option>
+	<option timeZoneId="24" gmtAdjustment="GMT-03:00" useDaylightTime="1" value="-3|Greenland">(GMT-03:00) Greenland</option>
+	
+	<option timeZoneId="82" gmtAdjustment="GMT+13:00" useDaylightTime="0" value="13|Hawaii">(GMT+13:00) Nuku'alofa</option>
 </select>
 <INPUT TYPE = "Submit" Name = "Submit1" VALUE = "Submit">
 
